@@ -20,17 +20,13 @@ export class UserService {
     return await this.userRepository.createUser(user);
   }
 
-  async setUserCategory(userId: string, category: string) {
-    return await this.userRepository.setUserCategory(userId, category);
+  async setUserCategory(userId: string, cateogoryId: string) {
+    return await this.userRepository.setUserCategory(userId, cateogoryId);
   }
 }
 
-// const newUser = new UserService();
-// console.log(newUser.createUser(userSeed))
-// console.log(newUser.setUserCategory('649cd40b33739b8a2d12cdef', '649cc099e3f0692b8df39650'))
-// console.log(newUser.getUserCategory("649cd40b33739b8a2d12cdef"));
-// console.log(newUser.populateCategories('649cd40b33739b8a2d12cdef'))
 
-const newUser = new UserService
-// newUser.getUser('649cd40b33739b8a2d12cdef').then(res => console.log(res))
-newUser.getUserCategory("649cd40b33739b8a2d12cdef").then(res => console.log(res))
+
+// const newUser = new UserService
+// // newUser.getUser('649cd40b33739b8a2d12cdef').then(res => console.log(res))
+// newUser.getUserCategory("649cd40b33739b8a2d12cdef").then(res => console.log(res))
