@@ -2,10 +2,10 @@
   "name": "backend",
   "private": true,
   "version": "0.0.0",
-  "type": "commonjs",
+  "type": "module",
   "main": "server.ts",
   "scripts": {
-    "dev": "ts-node-esm server.ts",
+    "dev": "ts-node-esm ./server.ts",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "start:nodemon": "./node_modules/nodemon/bin/nodemon.js"
