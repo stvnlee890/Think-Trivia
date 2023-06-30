@@ -9,4 +9,8 @@ export default {
     "\\.(gif|ttf|eot|svg|png)$": "./test/__mocks__/fileMock.js",
     "\\.(css|less|sass|scss)$": "identity-obj-proxy",
   },
+  setupFilesAfterEnv: [
+    "./src/__tests__/App.test.tsx"
+  ]
+
 };

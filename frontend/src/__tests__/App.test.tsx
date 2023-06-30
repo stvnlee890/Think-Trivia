@@ -1,25 +1,35 @@
 // Imports
-import { render, screen } from "@testing-library/react"
-import user from '@testing-library/user-event'
+import { render, screen } from "@testing-library/react";
+import user from "@testing-library/user-event";
+import '@testing-library/jest-dom/extend-expect'
 
 // To Test
 import App from "../App";
 
 // TESTS
-test('Renders main page correctly', async () => {
-    // Setup
+describe("App component", () => {
+  test("Renders main page correctly", async () => {
+    // Arrange
     render(<App />);
-    const buttonCount = await screen.findByRole('button')
+    const heading = await screen.findByRole('heading')
+    expect(heading).toHaveTextContent('Vite + React')
+  });
 
-    // Pre expectations
-    expect(buttonCount.innerHTML).toBe('count is: 0')
 
-    // Init
-    // Need await because user.click() returns a promise
-    await user.click(buttonCount);
-    await user.click(buttonCount);
-
-    // Post expectations
-    expect(buttonCount.innerHTML).toBe('count is: 2')
+test("Renders button correctly", async () => {
+    render(<App />)
+    const button = await screen.findByRole('button')
+    expect(button).toHaveTextContent('count is: 0')
 })
 
+test("Increments button correctly", async () => {
+    // Arrang
+    render(<App />)
+    const button = await screen.findByRole('button')
+    // Act
+    await user.click(button)
+    await user.click(button)
+    // Assert
+    expect(button).toHaveTextContent('count is: 2')
+})
+});
