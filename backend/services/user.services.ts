@@ -1,4 +1,3 @@
-import { User } from "../models/user";
 import { UserRepository, UserData } from "../repository/user.repository.ts";
 
 export class UserService {
