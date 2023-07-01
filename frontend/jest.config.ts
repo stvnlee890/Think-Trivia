@@ -8,7 +8,6 @@ export default {
   moduleNameMapper: {
     "\\.(gif|ttf|eot|svg|png)$": "./test/__mocks__/fileMock.js",
     "\\.(css|less|sass|scss)$": "identity-obj-proxy",
-    "mockRdd": "./test/__mocks__/mockRdd.js",
   },
   setupFilesAfterEnv: ["./src/__tests__/App.test.tsx"],
 };

@@ -1,16 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom/extend-expect";
-import ReactRouter from 'react-router-dom'
+import ReactRouter from "react-router-dom";
 import Home from "../components/home/Home";
-
-
-// jest.mock("react-router-dom", () => ({
-//   ...(jest.requireActual("react-router-dom") as any),
-//   useNavigate: () => jest.fn(),
-// }));
-
-
 
 describe("Home page renders", () => {
   it("should display app name", async () => {
@@ -26,30 +18,18 @@ describe("Home page renders", () => {
   });
 });
 
-// describe("Button interaction", () => {
-//   it("should navigate to QuizPage when button is clicked", async () => {
-//     const user = userEvent.setup()
-//     const navigate = useNavigate()
-    
-//     render(
-//         <Home />
-//     );
-//     const button = screen.getByText('Start Playing')
-//     await user.click(button)
-//     expect(navigate).toHaveBeenCalledTimes(1)
-//     expect(navigate).toHaveBeenCalledWith('/quiz')
-//   });
 describe("Button interaction", () => {
   it("should navigate to QuizPage when button is clicked", async () => {
-    const user = userEvent.setup()
-    const mockedUsedNavigate = jest.fn()
-   jest.spyOn(ReactRouter, 'useNavigate').mockReturnValue(mockedUsedNavigate)
-    render(
-        <Home />
-    );
-    const button = screen.getByText('Start Playing')
-    await user.click(button)
-    expect(mockedUsedNavigate).toHaveBeenCalledTimes(1)
-    expect(mockedUsedNavigate).toHaveBeenCalledWith('/quiz')
+    const user = userEvent.setup();
+    const mockedUsedNavigate = jest.fn();
+    jest.spyOn(ReactRouter, "useNavigate").mockReturnValue(mockedUsedNavigate);
+
+    render(<Home />);
+
+    const button = screen.getByText("Start Playing");
+    await user.click(button);
+
+    expect(mockedUsedNavigate).toHaveBeenCalledTimes(1);
+    expect(mockedUsedNavigate).toHaveBeenCalledWith("/quiz");
   });
 });
