@@ -1,28 +1,55 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-// import user from "@testing-library/user-event";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom/extend-expect";
-
+import ReactRouter from 'react-router-dom'
 import Home from "../components/home/Home";
 
+
+// jest.mock("react-router-dom", () => ({
+//   ...(jest.requireActual("react-router-dom") as any),
+//   useNavigate: () => jest.fn(),
+// }));
+
+
+
 describe("Home page renders", () => {
-  test("Displays application name heading", async () => {
+  it("should display app name", async () => {
     render(<Home />);
     const mainHeading = await screen.findByRole("heading");
     expect(mainHeading).toHaveTextContent("Think Trivia");
   });
 
-  test("Displays proper button text", async () => {
+  it("should display button's proper text", async () => {
     render(<Home />);
     const button = await screen.findByRole("button");
     expect(button).toHaveTextContent("Start Playing");
   });
 });
 
+// describe("Button interaction", () => {
+//   it("should navigate to QuizPage when button is clicked", async () => {
+//     const user = userEvent.setup()
+//     const navigate = useNavigate()
+    
+//     render(
+//         <Home />
+//     );
+//     const button = screen.getByText('Start Playing')
+//     await user.click(button)
+//     expect(navigate).toHaveBeenCalledTimes(1)
+//     expect(navigate).toHaveBeenCalledWith('/quiz')
+//   });
 describe("Button interaction", () => {
-  test("Navigates to QuizPage when button is clicked", async () => {    
-    render(<Home />);
-    const button = screen.getByRole("button", { name: "Start Playing" });
-    fireEvent.click(button);
-    expect(window.location.pathname).toContain('/quiz');
+  it("should navigate to QuizPage when button is clicked", async () => {
+    const user = userEvent.setup()
+    const mockedUsedNavigate = jest.fn()
+   jest.spyOn(ReactRouter, 'useNavigate').mockReturnValue(mockedUsedNavigate)
+    render(
+        <Home />
+    );
+    const button = screen.getByText('Start Playing')
+    await user.click(button)
+    expect(mockedUsedNavigate).toHaveBeenCalledTimes(1)
+    expect(mockedUsedNavigate).toHaveBeenCalledWith('/quiz')
   });
 });
