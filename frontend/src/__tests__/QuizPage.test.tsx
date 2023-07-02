@@ -1,10 +1,12 @@
 import "@testing-library/jest-dom/extend-expect";
+import { render, screen } from "@testing-library/react";
+// import userEvent from "@testing-library/user-event";
 import { TriviaApiService } from "../services/triviaApiService";
-
+import QuizPage from "../components/quizPage/QuizPage";
 const baseUrl = "https://the-trivia-api.com/v2";
 
 describe("Axios get request", () => {
-  it("getRandomQuestion does not throw an error", async () => {
+  it('should not throw an error', async () => {
     const apiService = new TriviaApiService(baseUrl);
 
     try {
@@ -22,6 +24,12 @@ describe("Axios get request", () => {
     } catch (err) {
         expect(err).toBeUndefined()
     }
+  })
+
+  it('should display an error text when api fails', async () => {
+    render(<QuizPage />) 
+    const errorText = await screen.findByText('Something Went Wrong')
+    expect(errorText).toBeInTheDocument()
   })
 
 });
