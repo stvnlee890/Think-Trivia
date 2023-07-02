@@ -1,0 +1,19 @@
+.quiz-content.container {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+}
+
+.quiz-content.container > p {
+    text-align: center;
+}
+
+.quiz-content.wrapper {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.answer {
+    text-align: center;
+}
