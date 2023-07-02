@@ -6,9 +6,8 @@ import QuizPage from "../components/quizPage/QuizPage";
 const baseUrl = "https://the-trivia-api.com/v2";
 
 describe("Axios get request", () => {
-  it('should not throw an error', async () => {
+  it("should not throw an error", async () => {
     const apiService = new TriviaApiService(baseUrl);
-
     try {
       await apiService.getRandomQuestions();
     } catch (err) {
@@ -16,20 +15,19 @@ describe("Axios get request", () => {
     }
   });
 
-  it('should return an array of ten quiz questions', async () => {
+  it("should return an array of ten quiz questions", async () => {
     const apiService = new TriviaApiService(baseUrl);
     try {
-        const service = await apiService.getRandomQuestions();
-        expect(service).toHaveLength(10)
+      const service = await apiService.getRandomQuestions();
+      expect(service).toHaveLength(10);
     } catch (err) {
-        expect(err).toBeUndefined()
+      expect(err).toBeUndefined();
     }
-  })
+  });
 
-  it('should display an error text when api fails', async () => {
-    render(<QuizPage />) 
-    const errorText = await screen.findByText('Something Went Wrong')
-    expect(errorText).toBeInTheDocument()
-  })
-
+  it("should display an error text when api fails", async () => {
+    render(<QuizPage />);
+    const errorText = await screen.findByText("Something Went Wrong");
+    expect(errorText).toBeInTheDocument();
+  });
 });
