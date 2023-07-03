@@ -15,6 +15,7 @@ export default function QuizContent({ quiz }: IProps) {
   const [questionIndex, setQuestionIndex] = useState<number>(0);
   const [correctAnswerCount, setCorrectAnswerCount] = useState<number>(0);
   const [answers, setAnswers] = useState<string[]>([]);
+  const [currentAnswer, setCurrentAnswer] = useState<string>('')
   const [category, setCategory] = useState<Category>({});
   const currentQuestion = quiz[questionIndex];
 
@@ -38,16 +39,18 @@ export default function QuizContent({ quiz }: IProps) {
   const handleIndexCount = () => {
     if (questionIndex < 9) {
       setQuestionIndex((questionIndex) => questionIndex + 1);
+      if (currentAnswer === quiz[questionIndex].correctAnswer) {
+        setCorrectAnswerCount((prev) => (prev += 1))
+      }
     } else {
       setQuestionIndex((questionIndex) => questionIndex * 1);
     }
+ 
   };
 
-  const checkAnswers = (e: React.MouseEvent<HTMLElement>) => {
+  const storeCurrAnswer = (e: React.MouseEvent<HTMLElement>) => {
     const userClick = e.target as HTMLElement;
-    if (userClick.innerText === quiz[questionIndex].correctAnswer) {
-      setCorrectAnswerCount((prev) => (prev += 1));
-    }
+    setCurrentAnswer(userClick.innerText)
   };
   console.log(correctAnswerCount);
 
@@ -69,7 +72,7 @@ export default function QuizContent({ quiz }: IProps) {
       </div>
       <div className="answer">
         {answers.map((ele, idx) => (
-          <p onClick={checkAnswers} key={idx}>
+          <p onClick={storeCurrAnswer} key={idx}>
             {ele}
           </p>
         ))}
