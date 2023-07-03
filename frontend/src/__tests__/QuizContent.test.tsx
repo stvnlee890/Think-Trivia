@@ -32,14 +32,16 @@ test("count should increment correctly and display the question text", async () 
     count++;
   }
   const countParagraph = screen.getByText(`${count} / ${mockQuiz.length}`);
-  const questionText = screen.getByText(mockQuiz[count -1].question.text);
-  expect(countParagraph).toHaveTextContent('10 / 10');
+  const questionText = screen.getByText(mockQuiz[count - 1].question.text);
+  expect(countParagraph).toHaveTextContent("10 / 10");
   expect(questionText).toBeInTheDocument();
 });
 
-test("the sum of category values after each quiz should be 10", () => {
+test("the sum of category values after each quiz should be 10", async () => {
+  const user = userEvent.setup();
   render(<QuizContent quiz={mockQuiz} />);
   const category: { [key: string]: number } = {};
+  const button = await screen.findByRole("button");
   for (let i = 0; i < mockQuiz.length; i++) {
     const currentQuestion = mockQuiz[i];
 
@@ -48,7 +50,9 @@ test("the sum of category values after each quiz should be 10", () => {
     } else {
       category[currentQuestion.category]++;
     }
+    await user.click(button);
   }
+
   const sum = Object.values(category).reduce((acc, value) => acc + value, 0);
-  expect(sum).toBe(10)
+  expect(sum).toBe(10);
 });

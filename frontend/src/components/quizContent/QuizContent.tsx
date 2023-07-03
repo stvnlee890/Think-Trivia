@@ -6,9 +6,9 @@ export interface IProps {
   quiz: QuizItem[];
 }
 
-interface Category {
+type Category = {
   [key: string]: number;
-}
+};
 
 export default function QuizContent({ quiz }: IProps) {
   console.log(quiz);
@@ -32,7 +32,7 @@ export default function QuizContent({ quiz }: IProps) {
     if (questionIndex < 9) {
       setQuestionIndex((questionIndex) => questionIndex + 1);
     } else {
-      setQuestionIndex((questionIndex) => questionIndex)
+      setQuestionIndex((questionIndex) => questionIndex * 1);
     }
   };
 
