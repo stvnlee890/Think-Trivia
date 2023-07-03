@@ -1,19 +1,38 @@
 import "./quizContent.css";
-import { useState } from "react";
+import { useState, useLayoutEffect } from "react";
 import { QuizItem } from "../quizPage/QuizPage";
 
 export interface IProps {
   quiz: QuizItem[];
 }
 
+interface Category {
+  [key: string]: number;
+}
+
 export default function QuizContent({ quiz }: IProps) {
   console.log(quiz);
   const [questionIndex, setQuestionIndex] = useState<number>(0);
-  const currentQuestion = quiz[questionIndex]
+  const [category, setCategory] = useState<Category>({});
+  const currentQuestion = quiz[questionIndex];
+
+  useLayoutEffect(() => {
+    if (!category[currentQuestion.category]) {
+      setCategory({ ...category, [currentQuestion.category]: 1 });
+    } else {
+      setCategory({
+        ...category,
+        [currentQuestion.category]: (category[currentQuestion.category] += 1),
+      });
+    }
+    console.log(category);
+  }, [questionIndex]);
 
   const handleCount = () => {
     if (questionIndex < 9) {
       setQuestionIndex((questionIndex) => questionIndex + 1);
+    } else {
+      setQuestionIndex((questionIndex) => questionIndex)
     }
   };
 
@@ -25,7 +44,10 @@ export default function QuizContent({ quiz }: IProps) {
     return array;
   };
 
-  const answers = shuffle([...currentQuestion.incorrectAnswers, currentQuestion.correctAnswer])
+  const answers = shuffle([
+    ...currentQuestion.incorrectAnswers,
+    currentQuestion.correctAnswer,
+  ]);
 
   return (
     <section className="quiz-content container">
@@ -36,9 +58,9 @@ export default function QuizContent({ quiz }: IProps) {
         <p>{currentQuestion.question.text}</p>
       </div>
       <div className="answer">
-        { answers.map((ele, idx) => (
-            <p key={idx}>{ele}</p>
-        )) }
+        {answers.map((ele, idx) => (
+          <p key={idx}>{ele}</p>
+        ))}
       </div>
       <button onClick={handleCount}>Next</button>
     </section>
