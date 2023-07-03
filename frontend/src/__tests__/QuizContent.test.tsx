@@ -12,7 +12,11 @@ for (let i = 0; i < 10; i++) {
     correctAnswer: "Mock Correct Answer",
     difficulty: "Mock Difficulty",
     id: "mock-id",
-    incorrectAnswers: ["Incorrect Answer 1", "Incorrect Answer 2"],
+    incorrectAnswers: [
+      "Incorrect Answer 1",
+      "Incorrect Answer 2",
+      "Incorrect Answer 3",
+    ],
     isNiche: false,
     question: { text: "Mock Question" },
     regions: [],
@@ -56,3 +60,5 @@ test("the sum of category values after each quiz should be 10", async () => {
   const sum = Object.values(category).reduce((acc, value) => acc + value, 0);
   expect(sum).toBe(10);
 });
+
+

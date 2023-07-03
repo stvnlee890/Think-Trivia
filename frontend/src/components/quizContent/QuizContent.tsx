@@ -13,10 +13,18 @@ type Category = {
 export default function QuizContent({ quiz }: IProps) {
   console.log(quiz);
   const [questionIndex, setQuestionIndex] = useState<number>(0);
+  const [correctAnswerCount, setCorrectAnswerCount] = useState<number>(0);
+  const [answers, setAnswers] = useState<string[]>([]);
   const [category, setCategory] = useState<Category>({});
   const currentQuestion = quiz[questionIndex];
 
   useLayoutEffect(() => {
+    setAnswers(
+      shuffle([
+        ...currentQuestion.incorrectAnswers,
+        currentQuestion.correctAnswer,
+      ])
+    );
     if (!category[currentQuestion.category]) {
       setCategory({ ...category, [currentQuestion.category]: 1 });
     } else {
@@ -25,10 +33,9 @@ export default function QuizContent({ quiz }: IProps) {
         [currentQuestion.category]: (category[currentQuestion.category] += 1),
       });
     }
-    console.log(category);
   }, [questionIndex]);
 
-  const handleCount = () => {
+  const handleIndexCount = () => {
     if (questionIndex < 9) {
       setQuestionIndex((questionIndex) => questionIndex + 1);
     } else {
@@ -36,18 +43,21 @@ export default function QuizContent({ quiz }: IProps) {
     }
   };
 
-  const shuffle = (array: string[]) => {
+  const checkAnswers = (e: React.MouseEvent<HTMLElement>) => {
+    const userClick = e.target as HTMLElement;
+    if (userClick.innerText === quiz[questionIndex].correctAnswer) {
+      setCorrectAnswerCount((prev) => (prev += 1));
+    }
+  };
+  console.log(correctAnswerCount);
+
+  function shuffle(array: string[]) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
-  };
-
-  const answers = shuffle([
-    ...currentQuestion.incorrectAnswers,
-    currentQuestion.correctAnswer,
-  ]);
+  }
 
   return (
     <section className="quiz-content container">
@@ -59,10 +69,12 @@ export default function QuizContent({ quiz }: IProps) {
       </div>
       <div className="answer">
         {answers.map((ele, idx) => (
-          <p key={idx}>{ele}</p>
+          <p onClick={checkAnswers} key={idx}>
+            {ele}
+          </p>
         ))}
       </div>
-      <button onClick={handleCount}>Next</button>
+      <button onClick={handleIndexCount}>Next</button>
     </section>
   );
 }
