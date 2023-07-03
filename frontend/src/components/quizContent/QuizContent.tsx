@@ -11,11 +11,12 @@ type Category = {
 };
 
 export default function QuizContent({ quiz }: IProps) {
-  console.log(quiz);
+  console.log(quiz)
   const [questionIndex, setQuestionIndex] = useState<number>(0);
   const [correctAnswerCount, setCorrectAnswerCount] = useState<number>(0);
+  const [correctState, setCorrectState] = useState<string>("");
   const [answers, setAnswers] = useState<string[]>([]);
-  const [currentAnswer, setCurrentAnswer] = useState<string>('')
+  const [currentAnswer, setCurrentAnswer] = useState<string>("");
   const [category, setCategory] = useState<Category>({});
   const currentQuestion = quiz[questionIndex];
 
@@ -37,22 +38,28 @@ export default function QuizContent({ quiz }: IProps) {
   }, [questionIndex]);
 
   const handleIndexCount = () => {
+
     if (questionIndex < 9) {
-      setQuestionIndex((questionIndex) => questionIndex + 1);
       if (currentAnswer === quiz[questionIndex].correctAnswer) {
-        setCorrectAnswerCount((prev) => (prev += 1))
+        const getAnswerIndex = answers.indexOf(currentAnswer);
+        console.log("here", getAnswerIndex);
+        setCorrectAnswerCount((prev) => (prev += 1));
+        setCorrectState(`correct ans-${getAnswerIndex}`);
       }
+      setTimeout(() => {
+        setQuestionIndex((questionIndex) => questionIndex + 1);
+        setCorrectState("");
+      }, 1500);
     } else {
       setQuestionIndex((questionIndex) => questionIndex * 1);
     }
- 
   };
+  console.log(correctAnswerCount);
 
   const storeCurrAnswer = (e: React.MouseEvent<HTMLElement>) => {
     const userClick = e.target as HTMLElement;
-    setCurrentAnswer(userClick.innerText)
+    setCurrentAnswer(userClick.innerText);
   };
-  console.log(correctAnswerCount);
 
   function shuffle(array: string[]) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -70,9 +77,13 @@ export default function QuizContent({ quiz }: IProps) {
       <div className="quiz-content wrapper">
         <p>{currentQuestion.question.text}</p>
       </div>
-      <div className="answer">
+      <div className="answer-container">
         {answers.map((ele, idx) => (
-          <p onClick={storeCurrAnswer} key={idx}>
+          <p
+            className={`answers ${correctState} ans-${idx}`}
+            onClick={storeCurrAnswer}
+            key={idx}
+          >
             {ele}
           </p>
         ))}

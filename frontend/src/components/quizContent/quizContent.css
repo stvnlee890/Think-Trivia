@@ -14,6 +14,28 @@
     text-align: center;
 }
 
-.answer {
+.answer-container {
     text-align: center;
+    margin-top: 40px;
+}
+
+.answers {
+    padding-bottom: 10px
+}
+
+.correct .ans-0 {
+    border: 1px solid green;
+}
+.correct .ans-1 {
+    border: 1px solid green;
+}
+.correct .ans-2 {
+    border: 1px solid green;
+}
+.correct .ans-3 {
+    border: 1px solid green;
+}
+
+.incorrect {
+    border: 1px solid red;
 }
