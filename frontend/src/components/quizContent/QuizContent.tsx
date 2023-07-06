@@ -12,7 +12,7 @@ type Category = {
 
 export default function QuizContent({ quiz }: IProps) {
   console.log(quiz);
-  const styleRef = useRef<HTMLDivElement | null>(null);
+  const styleRef = useRef<HTMLDivElement>(null);
   const [questionIndex, setQuestionIndex] = useState<number>(0);
   const [correctAnswerCount, setCorrectAnswerCount] = useState<number>(0);
   const [answers, setAnswers] = useState<string[]>([]);
@@ -38,21 +38,29 @@ export default function QuizContent({ quiz }: IProps) {
   }, [questionIndex]);
 
   const handleIndexCount = () => {
-    const answerRef = styleRef.current.children;
+    const answerRef = styleRef.current;
     const getAnswerIndex = answers.indexOf(currentAnswer);
     const correctAnswerIndex = answers.indexOf(
       quiz[questionIndex].correctAnswer
     );
     if (questionIndex <= 9) {
-      const { userAnswerStyle, correctAnswerStyle, correctAnswerCount } = validateAnswer(getAnswerIndex, correctAnswerIndex)
-      answerRef[getAnswerIndex].style.border = userAnswerStyle;
-      answerRef[correctAnswerIndex].style.border = correctAnswerStyle
+      const { userAnswerStyle, correctAnswerStyle, correctAnswerCount } =
+        validateAnswer();
+      if (answerRef && correctAnswerStyle) {
+        (answerRef.children[getAnswerIndex] as HTMLElement).style.border =
+          userAnswerStyle;
+        (answerRef.children[correctAnswerIndex] as HTMLElement).style.border =
+          correctAnswerStyle;
+      }
       setTimeout(() => {
         setQuestionIndex((questionIndex) => questionIndex + 1);
-        answerRef[getAnswerIndex].style.border = "";
-        answerRef[correctAnswerIndex].style.border = "";
+        if (answerRef) {
+          (answerRef.children[correctAnswerIndex] as HTMLElement).style.border =
+            "";
+          (answerRef.children[getAnswerIndex] as HTMLElement).style.border = "";
+        }
       }, 1500);
-      setCorrectAnswerCount(prev => prev + correctAnswerCount)
+      setCorrectAnswerCount((prev) => prev + correctAnswerCount);
     } else {
       setQuestionIndex((questionIndex) => questionIndex * 1);
     }
@@ -71,11 +79,15 @@ export default function QuizContent({ quiz }: IProps) {
     return array;
   }
 
-  function validateAnswer(getAnswerIndex, correctAnswerIndex) {
-    if(currentAnswer === quiz[questionIndex].correctAnswer) {
-      return { userAnswerStyle: '1px solid green', correctAnswerCount: 1 }
+  function validateAnswer() {
+    if (currentAnswer === quiz[questionIndex].correctAnswer) {
+      return { userAnswerStyle: "1px solid green", correctAnswerCount: 1 };
     } else {
-      return { correctAnswerStyle: '1px solid green', userAnswerStyle: '1px solid red', correctAnswerCount: 0 }
+      return {
+        correctAnswerStyle: "1px solid green",
+        userAnswerStyle: "1px solid red",
+        correctAnswerCount: 0,
+      };
     }
   }
 
