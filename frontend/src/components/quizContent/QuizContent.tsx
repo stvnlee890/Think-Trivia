@@ -43,10 +43,10 @@ export default function QuizContent({ quiz }: IProps) {
     const correctAnswerIndex = answers.indexOf(
       quiz[questionIndex].correctAnswer
     );
-    if (questionIndex <= 9) {
-      const { userAnswerStyle, correctAnswerStyle, correctAnswerCount } =
-        validateAnswer();
-      if (answerRef && correctAnswerStyle) {
+    const { userAnswerStyle, correctAnswerStyle, correctAnswerCount } =
+      validateAnswer();
+    if (questionIndex < 9) {
+      if (answerRef) {
         (answerRef.children[getAnswerIndex] as HTMLElement).style.border =
           userAnswerStyle;
         (answerRef.children[correctAnswerIndex] as HTMLElement).style.border =
@@ -63,6 +63,12 @@ export default function QuizContent({ quiz }: IProps) {
       setCorrectAnswerCount((prev) => prev + correctAnswerCount);
     } else {
       setQuestionIndex((questionIndex) => questionIndex * 1);
+      if (answerRef) {
+        (answerRef.children[getAnswerIndex] as HTMLElement).style.border =
+          userAnswerStyle;
+        (answerRef.children[correctAnswerIndex] as HTMLElement).style.border =
+          correctAnswerStyle;
+      }
     }
   };
   console.log(correctAnswerCount);
@@ -81,7 +87,11 @@ export default function QuizContent({ quiz }: IProps) {
 
   function validateAnswer() {
     if (currentAnswer === quiz[questionIndex].correctAnswer) {
-      return { userAnswerStyle: "1px solid green", correctAnswerCount: 1 };
+      return {
+        userAnswerStyle: "1px solid green",
+        correctAnswerCount: 1,
+        correctAnswerStyle: "1px solid green",
+      };
     } else {
       return {
         correctAnswerStyle: "1px solid green",
