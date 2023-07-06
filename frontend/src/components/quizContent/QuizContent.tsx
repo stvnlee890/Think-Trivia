@@ -45,13 +45,14 @@ export default function QuizContent({ quiz }: IProps) {
     );
     const { userAnswerStyle, correctAnswerStyle, correctAnswerCount } =
       validateAnswer();
+
+    if (answerRef) {
+      (answerRef.children[getAnswerIndex] as HTMLElement).style.border =
+        userAnswerStyle;
+      (answerRef.children[correctAnswerIndex] as HTMLElement).style.border =
+        correctAnswerStyle;
+    }
     if (questionIndex < 9) {
-      if (answerRef) {
-        (answerRef.children[getAnswerIndex] as HTMLElement).style.border =
-          userAnswerStyle;
-        (answerRef.children[correctAnswerIndex] as HTMLElement).style.border =
-          correctAnswerStyle;
-      }
       setTimeout(() => {
         setQuestionIndex((questionIndex) => questionIndex + 1);
         if (answerRef) {
@@ -62,17 +63,12 @@ export default function QuizContent({ quiz }: IProps) {
       }, 1500);
       setCorrectAnswerCount((prev) => prev + correctAnswerCount);
     } else {
+      // Allow render of last quiz element in array
       setQuestionIndex((questionIndex) => questionIndex * 1);
-      if (answerRef) {
-        (answerRef.children[getAnswerIndex] as HTMLElement).style.border =
-          userAnswerStyle;
-        (answerRef.children[correctAnswerIndex] as HTMLElement).style.border =
-          correctAnswerStyle;
-      }
     }
   };
   console.log(correctAnswerCount);
-  const storeCurrAnswer = (e: React.MouseEvent<HTMLElement>) => {
+  const storeCurrAnswer = (e: React.MouseEvent) => {
     const userClick = e.target as HTMLElement;
     setCurrentAnswer(userClick.innerText);
   };
