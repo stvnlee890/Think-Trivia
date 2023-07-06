@@ -1,5 +1,5 @@
 import "./quizContent.css";
-import { useState, useLayoutEffect } from "react";
+import { useState, useLayoutEffect, useRef } from "react";
 import { QuizItem } from "../quizPage/QuizPage";
 
 export interface IProps {
@@ -11,7 +11,7 @@ type Category = {
 };
 
 export default function QuizContent({ quiz }: IProps) {
-  console.log(quiz)
+  console.log(quiz);
   const [questionIndex, setQuestionIndex] = useState<number>(0);
   const [correctAnswerCount, setCorrectAnswerCount] = useState<number>(0);
   const [correctState, setCorrectState] = useState<string>("");
@@ -38,11 +38,10 @@ export default function QuizContent({ quiz }: IProps) {
   }, [questionIndex]);
 
   const handleIndexCount = () => {
-
     if (questionIndex < 9) {
       if (currentAnswer === quiz[questionIndex].correctAnswer) {
         const getAnswerIndex = answers.indexOf(currentAnswer);
-        console.log("here", getAnswerIndex);
+        // console.log("here", getAnswerIndex);
         setCorrectAnswerCount((prev) => (prev += 1));
         setCorrectState(`correct ans-${getAnswerIndex}`);
       }
@@ -55,10 +54,10 @@ export default function QuizContent({ quiz }: IProps) {
     }
   };
   console.log(correctAnswerCount);
-
   const storeCurrAnswer = (e: React.MouseEvent<HTMLElement>) => {
     const userClick = e.target as HTMLElement;
     setCurrentAnswer(userClick.innerText);
+  
   };
 
   function shuffle(array: string[]) {
