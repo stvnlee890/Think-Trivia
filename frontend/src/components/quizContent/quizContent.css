@@ -1,7 +1,7 @@
 .quiz-content.container {
    display: flex;
    flex-direction: column;
-   justify-content: center;
+   align-items: center;
 }
 
 .quiz-content.container > p {
@@ -17,25 +17,16 @@
 .answer-container {
     text-align: center;
     margin-top: 40px;
+    width: 40%;
 }
 
-.answers {
-    padding-bottom: 10px
+.answer-wrapper {
+    display: flex;
+    border: 1px solid black;
+    border-radius: 10px;
+    justify-content: center;
+    height: 50px;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
-.correct .ans-0 {
-    border: 1px solid green;
-}
-.correct .ans-1 {
-    border: 1px solid green;
-}
-.correct .ans-2 {
-    border: 1px solid green;
-}
-.correct .ans-3 {
-    border: 1px solid green;
-}
-
-.incorrect {
-    border: 1px solid red;
-}

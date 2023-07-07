@@ -20,6 +20,8 @@ export default function QuizContent({ quiz }: IProps) {
   const [category, setCategory] = useState<Category>({});
   const currentQuestion = quiz[questionIndex];
 
+  const answerRef = styleRef.current;
+
   useLayoutEffect(() => {
     setAnswers(
       shuffle([
@@ -35,30 +37,37 @@ export default function QuizContent({ quiz }: IProps) {
         [currentQuestion.category]: (category[currentQuestion.category] += 1),
       });
     }
+    setCurrentAnswer(currentQuestion.correctAnswer)
   }, [questionIndex]);
-
+console.log(currentAnswer)
   const handleIndexCount = () => {
-    const answerRef = styleRef.current;
     const getAnswerIndex = answers.indexOf(currentAnswer);
     const correctAnswerIndex = answers.indexOf(
-      quiz[questionIndex].correctAnswer
+      currentQuestion.correctAnswer
     );
     const { userAnswerStyle, correctAnswerStyle, correctAnswerCount } =
       validateAnswer();
+      console.log(getAnswerIndex)
 
     if (answerRef) {
-      (answerRef.children[getAnswerIndex] as HTMLElement).style.border =
-        userAnswerStyle;
-      (answerRef.children[correctAnswerIndex] as HTMLElement).style.border =
-        correctAnswerStyle;
+      (
+        answerRef.children[getAnswerIndex] as HTMLElement
+      ).style.backgroundColor = userAnswerStyle;
+      (
+        answerRef.children[correctAnswerIndex] as HTMLElement
+      ).style.backgroundColor = correctAnswerStyle;
     }
+
     if (questionIndex < 9) {
       setTimeout(() => {
         setQuestionIndex((questionIndex) => questionIndex + 1);
         if (answerRef) {
-          (answerRef.children[correctAnswerIndex] as HTMLElement).style.border =
-            "";
-          (answerRef.children[getAnswerIndex] as HTMLElement).style.border = "";
+          (
+            answerRef.children[correctAnswerIndex] as HTMLElement
+          ).style.backgroundColor = "";
+          (
+            answerRef.children[getAnswerIndex] as HTMLElement
+          ).style.backgroundColor = "";
         }
       }, 1500);
       setCorrectAnswerCount((prev) => prev + correctAnswerCount);
@@ -67,10 +76,22 @@ export default function QuizContent({ quiz }: IProps) {
       setQuestionIndex((questionIndex) => questionIndex * 1);
     }
   };
-  console.log(correctAnswerCount);
-  const storeCurrAnswer = (e: React.MouseEvent) => {
+  // console.log(correctAnswerCount);
+  const handleClick = (e: React.MouseEvent) => {
     const userClick = e.target as HTMLElement;
-    setCurrentAnswer(userClick.innerText);
+    const text = userClick.innerText;
+    const clickedElement: string = userClick.className.split(" ")[1];
+    if (answerRef) {
+      const childNodes = [...answerRef.children];
+      childNodes.forEach((ele) => {
+        if (ele.className.includes(clickedElement)) {
+          (ele as HTMLElement).style.backgroundColor = "blue";
+        } else {
+          (ele as HTMLElement).style.backgroundColor = "";
+        }
+      });
+    }
+    setCurrentAnswer(text);
   };
 
   function shuffle(array: string[]) {
@@ -84,14 +105,14 @@ export default function QuizContent({ quiz }: IProps) {
   function validateAnswer() {
     if (currentAnswer === quiz[questionIndex].correctAnswer) {
       return {
-        userAnswerStyle: "1px solid green",
+        userAnswerStyle: "green",
         correctAnswerCount: 1,
-        correctAnswerStyle: "1px solid green",
+        correctAnswerStyle: "green",
       };
     } else {
       return {
-        correctAnswerStyle: "1px solid green",
-        userAnswerStyle: "1px solid red",
+        correctAnswerStyle: "green",
+        userAnswerStyle: "red",
         correctAnswerCount: 0,
       };
     }
@@ -107,9 +128,13 @@ export default function QuizContent({ quiz }: IProps) {
       </div>
       <div ref={styleRef} className="answer-container">
         {answers.map((ele, idx) => (
-          <p className={`answers-${idx}`} onClick={storeCurrAnswer} key={idx}>
-            {ele}
-          </p>
+          <div
+            key={idx}
+            className={`answer-wrapper ${idx}`}
+            onClick={handleClick}
+          >
+            <p className={`answers ${idx}`}>{ele}</p>
+          </div>
         ))}
       </div>
       <button onClick={handleIndexCount}>Next</button>
