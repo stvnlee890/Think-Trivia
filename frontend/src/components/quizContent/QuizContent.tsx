@@ -11,7 +11,7 @@ type Category = {
 };
 
 export default function QuizContent({ quiz }: IProps) {
-  console.log(quiz);
+  console.log(quiz)
   const styleRef = useRef<HTMLDivElement>(null);
   const [questionIndex, setQuestionIndex] = useState<number>(0);
   const [correctAnswerCount, setCorrectAnswerCount] = useState<number>(0);
@@ -19,28 +19,31 @@ export default function QuizContent({ quiz }: IProps) {
   const [currentAnswer, setCurrentAnswer] = useState<string>("");
   const [category, setCategory] = useState<Category>({});
   const currentQuestion = quiz[questionIndex];
+  const [toggleView, setToggleView] = useState<boolean>(false)
 
   const answerRef = styleRef.current;
+  const getAnswerIndex = answers.indexOf(currentAnswer);
+  const correctAnswerIndex = answers.indexOf(currentQuestion.correctAnswer);
 
+  console.log(category)
   useLayoutEffect(() => {
+    console.log(getAnswerIndex === correctAnswerIndex)
     setAnswers(shuffle([...currentQuestion.incorrectAnswers, currentQuestion.correctAnswer]));
-    if (!category[currentQuestion.category]) {
-      setCategory({ ...category, [currentQuestion.category]: 1 });
-    } else {
-      setCategory({...category,[currentQuestion.category]: (category[currentQuestion.category] += 1),
-      });
-    }
     setCurrentAnswer(currentQuestion.correctAnswer)
   }, [questionIndex]);
 
   const handleIndexCount = () => {
-    const getAnswerIndex = answers.indexOf(currentAnswer);
-    const correctAnswerIndex = answers.indexOf(currentQuestion.correctAnswer);
     const { userAnswerStyle, correctAnswerStyle, correctAnswerCount } = validateAnswer();
-      console.log(getAnswerIndex)
     if (answerRef) {
       (answerRef.children[getAnswerIndex] as HTMLElement).style.backgroundColor = userAnswerStyle;
       (answerRef.children[correctAnswerIndex] as HTMLElement).style.backgroundColor = correctAnswerStyle;
+    }
+
+    if (!category[currentQuestion.category] && getAnswerIndex === correctAnswerIndex) {
+      setCategory({ ...category, [currentQuestion.category]: 1 });
+    } else if(getAnswerIndex === correctAnswerIndex && getAnswerIndex === correctAnswerIndex) {
+      setCategory({...category,[currentQuestion.category]: (category[currentQuestion.category] += 1),
+      });
     }
 
     if (questionIndex < quiz.length -1) {
@@ -52,9 +55,12 @@ export default function QuizContent({ quiz }: IProps) {
         }
       }, 1500);
       setCorrectAnswerCount((prev) => prev + correctAnswerCount);
+    }else if(questionIndex === quiz.length - 1 && getAnswerIndex === correctAnswerIndex) {
+      setCorrectAnswerCount((prev) => prev + correctAnswerCount)
+      setToggleView(true)
     } else {
       // Allow render of last quiz element in array
-      setQuestionIndex((questionIndex) => questionIndex * 1);
+      setToggleView(true)
     }
   };
   // console.log(correctAnswerCount);
@@ -72,6 +78,7 @@ export default function QuizContent({ quiz }: IProps) {
         }
       });
     }
+
     setCurrentAnswer(text);
   };
 
@@ -104,6 +111,7 @@ export default function QuizContent({ quiz }: IProps) {
       <p>
         {questionIndex + 1} / {quiz.length}
       </p>
+      <p>{correctAnswerCount}</p>
       <div className="quiz-content wrapper">
         <p>{currentQuestion.question.text}</p>
       </div>
@@ -118,7 +126,8 @@ export default function QuizContent({ quiz }: IProps) {
           </div>
         ))}
       </div>
-      <button onClick={handleIndexCount}>Next</button>
+      { toggleView && <p>QUIZ DONE</p> }
+      { !toggleView && <button onClick={handleIndexCount}>Next</button> }
     </section>
   );
 }
