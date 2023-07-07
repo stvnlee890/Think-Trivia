@@ -23,51 +23,32 @@ export default function QuizContent({ quiz }: IProps) {
   const answerRef = styleRef.current;
 
   useLayoutEffect(() => {
-    setAnswers(
-      shuffle([
-        ...currentQuestion.incorrectAnswers,
-        currentQuestion.correctAnswer,
-      ])
-    );
+    setAnswers(shuffle([...currentQuestion.incorrectAnswers, currentQuestion.correctAnswer]));
     if (!category[currentQuestion.category]) {
       setCategory({ ...category, [currentQuestion.category]: 1 });
     } else {
-      setCategory({
-        ...category,
-        [currentQuestion.category]: (category[currentQuestion.category] += 1),
+      setCategory({...category,[currentQuestion.category]: (category[currentQuestion.category] += 1),
       });
     }
     setCurrentAnswer(currentQuestion.correctAnswer)
   }, [questionIndex]);
-console.log(currentAnswer)
+
   const handleIndexCount = () => {
     const getAnswerIndex = answers.indexOf(currentAnswer);
-    const correctAnswerIndex = answers.indexOf(
-      currentQuestion.correctAnswer
-    );
-    const { userAnswerStyle, correctAnswerStyle, correctAnswerCount } =
-      validateAnswer();
+    const correctAnswerIndex = answers.indexOf(currentQuestion.correctAnswer);
+    const { userAnswerStyle, correctAnswerStyle, correctAnswerCount } = validateAnswer();
       console.log(getAnswerIndex)
-
     if (answerRef) {
-      (
-        answerRef.children[getAnswerIndex] as HTMLElement
-      ).style.backgroundColor = userAnswerStyle;
-      (
-        answerRef.children[correctAnswerIndex] as HTMLElement
-      ).style.backgroundColor = correctAnswerStyle;
+      (answerRef.children[getAnswerIndex] as HTMLElement).style.backgroundColor = userAnswerStyle;
+      (answerRef.children[correctAnswerIndex] as HTMLElement).style.backgroundColor = correctAnswerStyle;
     }
 
-    if (questionIndex < 9) {
+    if (questionIndex < quiz.length -1) {
       setTimeout(() => {
         setQuestionIndex((questionIndex) => questionIndex + 1);
         if (answerRef) {
-          (
-            answerRef.children[correctAnswerIndex] as HTMLElement
-          ).style.backgroundColor = "";
-          (
-            answerRef.children[getAnswerIndex] as HTMLElement
-          ).style.backgroundColor = "";
+          (answerRef.children[correctAnswerIndex] as HTMLElement).style.backgroundColor = "";
+          (answerRef.children[getAnswerIndex] as HTMLElement).style.backgroundColor = "";
         }
       }, 1500);
       setCorrectAnswerCount((prev) => prev + correctAnswerCount);
@@ -77,15 +58,15 @@ console.log(currentAnswer)
     }
   };
   // console.log(correctAnswerCount);
-  const handleClick = (e: React.MouseEvent) => {
+  const handleUserSelection = (e: React.MouseEvent) => {
     const userClick = e.target as HTMLElement;
     const text = userClick.innerText;
     const clickedElement: string = userClick.className.split(" ")[1];
     if (answerRef) {
-      const childNodes = [...answerRef.children];
-      childNodes.forEach((ele) => {
+      const selectedElement = [...answerRef.children];
+      selectedElement.forEach((ele) => {
         if (ele.className.includes(clickedElement)) {
-          (ele as HTMLElement).style.backgroundColor = "blue";
+          (ele as HTMLElement).style.backgroundColor = "orange";
         } else {
           (ele as HTMLElement).style.backgroundColor = "";
         }
@@ -131,7 +112,7 @@ console.log(currentAnswer)
           <div
             key={idx}
             className={`answer-wrapper ${idx}`}
-            onClick={handleClick}
+            onClick={handleUserSelection}
           >
             <p className={`answers ${idx}`}>{ele}</p>
           </div>
