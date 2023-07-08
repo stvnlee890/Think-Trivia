@@ -16,7 +16,7 @@ export default function QuizContent({ quiz }: IProps) {
   const [correctAnswerCount, setCorrectAnswerCount] = useState<number>(0);
   const [answers, setAnswers] = useState<string[]>([]);
   const [currentAnswer, setCurrentAnswer] = useState<string>("");
-  const [userAnswer, setUserAnswer] = useState<string>("")
+  const [userAnswer, setUserAnswer] = useState<string>("");
   const [category, setCategory] = useState<Category>({});
   const [toggleView, setToggleView] = useState<boolean>(false);
   const currentQuestion = quiz[questionIndex];
@@ -37,27 +37,26 @@ Helper Functions
   }
 
   function validateAnswer(currentAnswer: string, userAnswer: string) {
-    if (userAnswer === '') {
+    if (userAnswer === "") {
       return {
         userAnswerStyle: null,
-        correctAnswerStyle: null,
+        correctAnswerStyle: "red",
         correctAnswerCount: 0,
         resetStyle: null,
       };
     }
     if (userAnswer === currentAnswer) {
-      console.log("CORRECT", currentAnswer)
       return {
-        userAnswerStyle: "correct",
-        correctAnswerStyle: "correct",
+        userAnswerStyle: "green",
+        correctAnswerStyle: "green",
         correctAnswerCount: 1,
         resetStyle: "",
       };
     } else {
-      console.log("WRONG")
+      console.log("Here");
       return {
-        userAnswerStyle: "incorrect",
-        correctAnswerStyle: "correct",
+        userAnswerStyle: "red",
+        correctAnswerStyle: "green",
         correctAnswerCount: 0,
         resetStyle: "",
       };
@@ -73,15 +72,13 @@ Helper Functions
   ) {
     if (styleRef.current) {
       const children = styleRef.current.children;
-      if (children[getAnswerIndex] && userAnswerStyle) {
-        (children[getAnswerIndex] as HTMLElement).classList.add(
-          userAnswerStyle
-        );
-      }
+      // if (children[getAnswerIndex] && userAnswerStyle) {
+      //   console.log(userAnswerStyle);
+      //   (children[getAnswerIndex] as HTMLElement).style.backgroundColor = userAnswerStyle
+      // }
       if (children[correctAnswerIndex] && correctAnswerStyle) {
-        (children[correctAnswerIndex] as HTMLElement).classList.add(
-          correctAnswerStyle
-        );
+        console.log(correctAnswerStyle);
+        (children[correctAnswerIndex] as HTMLElement).style.backgroundColor = correctAnswerStyle
       }
     }
   }
@@ -91,24 +88,20 @@ Helper Functions
     setCorrectAnswerCount: React.Dispatch<React.SetStateAction<number>>,
     styleRef: React.RefObject<HTMLDivElement>,
     correctAnswerCount: number,
-    correctAnswerIndex: number,
-    getAnswerIndex: number,
     setUserAnswer: React.Dispatch<React.SetStateAction<string>>
   ) {
     setTimeout(() => {
       setQuestionIndex((questionIndex) => questionIndex + 1);
       if (styleRef.current) {
         const children = styleRef.current.children;
-        if (children[correctAnswerIndex]) {
-          children[correctAnswerIndex].classList.remove("correct");
-        }
-        if (children[getAnswerIndex]) {
-          children[getAnswerIndex].classList.remove("incorrect");
-        }
+        const answerElements = [...children]
+        answerElements.forEach(answer => {
+          (answer as HTMLElement).style.backgroundColor = ""
+        })
       }
     }, 1500);
-      setCorrectAnswerCount((prev) => prev + correctAnswerCount);
-      setUserAnswer("")
+    setCorrectAnswerCount((prev) => prev + correctAnswerCount);
+    setUserAnswer("");
   }
 
   function updateCategoryState(
@@ -134,6 +127,7 @@ Helper Functions
     }
   }
 
+
   /*
 -----------------------------------------------------
 */
@@ -149,7 +143,7 @@ Helper Functions
   }, [questionIndex]);
 
   const handleIndexCount = () => {
-    console.log(currentAnswer, quiz[questionIndex].correctAnswer)
+    console.log(currentAnswer, quiz[questionIndex].correctAnswer);
     const { userAnswerStyle, correctAnswerStyle, correctAnswerCount } =
       validateAnswer(currentAnswer, userAnswer);
 
@@ -159,8 +153,6 @@ Helper Functions
         setCorrectAnswerCount,
         styleRef,
         correctAnswerCount,
-        correctAnswerIndex,
-        getAnswerIndex,
         setUserAnswer
       );
       updateStyling(
@@ -196,9 +188,9 @@ Helper Functions
       const selectedElement = [...styleRef.current.children];
       selectedElement.forEach((answer) => {
         if (answer.className.includes(clickedElement)) {
-          (answer as HTMLElement).classList.add("selected");
+          (answer as HTMLElement).style.backgroundColor = 'orange';
         } else {
-          (answer as HTMLElement).classList.remove("selected");
+          (answer as HTMLElement).style.backgroundColor = '';
         }
       });
     }
