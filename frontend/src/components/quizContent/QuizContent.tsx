@@ -55,11 +55,10 @@ export default function QuizContent({ quiz }: IProps) {
         }
       }, 1500);
       setCorrectAnswerCount((prev) => prev + correctAnswerCount);
-    }else if(questionIndex === quiz.length - 1 && getAnswerIndex === correctAnswerIndex) {
+    } else if (questionIndex === quiz.length - 1 && getAnswerIndex === correctAnswerIndex) {
       setCorrectAnswerCount((prev) => prev + correctAnswerCount)
       setToggleView(true)
     } else {
-      // Allow render of last quiz element in array
       setToggleView(true)
     }
   };
