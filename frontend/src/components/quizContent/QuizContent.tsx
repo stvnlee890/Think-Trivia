@@ -78,7 +78,8 @@ Helper Functions
       // }
       if (children[correctAnswerIndex] && correctAnswerStyle) {
         console.log(correctAnswerStyle);
-        (children[correctAnswerIndex] as HTMLElement).style.backgroundColor = correctAnswerStyle
+        (children[correctAnswerIndex] as HTMLElement).style.backgroundColor =
+          correctAnswerStyle;
       }
     }
   }
@@ -94,10 +95,10 @@ Helper Functions
       setQuestionIndex((questionIndex) => questionIndex + 1);
       if (styleRef.current) {
         const children = styleRef.current.children;
-        const answerElements = [...children]
-        answerElements.forEach(answer => {
-          (answer as HTMLElement).style.backgroundColor = ""
-        })
+        const answerElements = [...children];
+        answerElements.forEach((answer) => {
+          (answer as HTMLElement).style.backgroundColor = "";
+        });
       }
     }, 1500);
     setCorrectAnswerCount((prev) => prev + correctAnswerCount);
@@ -126,7 +127,6 @@ Helper Functions
       });
     }
   }
-
 
   /*
 -----------------------------------------------------
@@ -174,6 +174,13 @@ Helper Functions
       getAnswerIndex === correctAnswerIndex
     ) {
       setCorrectAnswerCount((prev) => prev + correctAnswerCount);
+      updateStyling(
+        styleRef,
+        getAnswerIndex,
+        correctAnswerIndex,
+        userAnswerStyle,
+        correctAnswerStyle
+      );
       setToggleView(true);
     } else {
       setToggleView(true);
@@ -188,9 +195,9 @@ Helper Functions
       const selectedElement = [...styleRef.current.children];
       selectedElement.forEach((answer) => {
         if (answer.className.includes(clickedElement)) {
-          (answer as HTMLElement).style.backgroundColor = 'orange';
+          (answer as HTMLElement).style.backgroundColor = "orange";
         } else {
-          (answer as HTMLElement).style.backgroundColor = '';
+          (answer as HTMLElement).style.backgroundColor = "";
         }
       });
     }
