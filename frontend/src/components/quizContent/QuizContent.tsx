@@ -18,8 +18,8 @@ export default function QuizContent({ quiz }: IProps) {
   const [answers, setAnswers] = useState<string[]>([]);
   const [currentAnswer, setCurrentAnswer] = useState<string>("");
   const [category, setCategory] = useState<Category>({});
-  const currentQuestion = quiz[questionIndex];
   const [toggleView, setToggleView] = useState<boolean>(false)
+  const currentQuestion = quiz[questionIndex];
 
   const answerRef = styleRef.current;
   const getAnswerIndex = answers.indexOf(currentAnswer);
