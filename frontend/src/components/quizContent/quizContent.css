@@ -30,4 +30,14 @@
     margin-bottom: 20px;
 }
 
+.selected {
+    background-color: orange;
+}
 
+.correct {
+    background-color: green
+}
+
+.incorrect {
+    background-color: red;
+}

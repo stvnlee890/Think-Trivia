@@ -11,75 +11,22 @@ type Category = {
 };
 
 export default function QuizContent({ quiz }: IProps) {
-  console.log(quiz)
   const styleRef = useRef<HTMLDivElement>(null);
   const [questionIndex, setQuestionIndex] = useState<number>(0);
   const [correctAnswerCount, setCorrectAnswerCount] = useState<number>(0);
   const [answers, setAnswers] = useState<string[]>([]);
   const [currentAnswer, setCurrentAnswer] = useState<string>("");
+  const [userAnswer, setUserAnswer] = useState<string>("")
   const [category, setCategory] = useState<Category>({});
-  const [toggleView, setToggleView] = useState<boolean>(false)
+  const [toggleView, setToggleView] = useState<boolean>(false);
   const currentQuestion = quiz[questionIndex];
-
-  const answerRef = styleRef.current;
   const getAnswerIndex = answers.indexOf(currentAnswer);
   const correctAnswerIndex = answers.indexOf(currentQuestion.correctAnswer);
 
-  console.log(category)
-  useLayoutEffect(() => {
-    console.log(getAnswerIndex === correctAnswerIndex)
-    setAnswers(shuffle([...currentQuestion.incorrectAnswers, currentQuestion.correctAnswer]));
-    setCurrentAnswer(currentQuestion.correctAnswer)
-  }, [questionIndex]);
-
-  const handleIndexCount = () => {
-    const { userAnswerStyle, correctAnswerStyle, correctAnswerCount } = validateAnswer();
-    if (answerRef) {
-      (answerRef.children[getAnswerIndex] as HTMLElement).style.backgroundColor = userAnswerStyle;
-      (answerRef.children[correctAnswerIndex] as HTMLElement).style.backgroundColor = correctAnswerStyle;
-    }
-
-    if (!category[currentQuestion.category] && getAnswerIndex === correctAnswerIndex) {
-      setCategory({ ...category, [currentQuestion.category]: 1 });
-    } else if(getAnswerIndex === correctAnswerIndex && getAnswerIndex === correctAnswerIndex) {
-      setCategory({...category,[currentQuestion.category]: (category[currentQuestion.category] += 1),
-      });
-    }
-
-    if (questionIndex < quiz.length -1) {
-      setTimeout(() => {
-        setQuestionIndex((questionIndex) => questionIndex + 1);
-        if (answerRef) {
-          (answerRef.children[correctAnswerIndex] as HTMLElement).style.backgroundColor = "";
-          (answerRef.children[getAnswerIndex] as HTMLElement).style.backgroundColor = "";
-        }
-      }, 1500);
-      setCorrectAnswerCount((prev) => prev + correctAnswerCount);
-    } else if (questionIndex === quiz.length - 1 && getAnswerIndex === correctAnswerIndex) {
-      setCorrectAnswerCount((prev) => prev + correctAnswerCount)
-      setToggleView(true)
-    } else {
-      setToggleView(true)
-    }
-  };
-  // console.log(correctAnswerCount);
-  const handleUserSelection = (e: React.MouseEvent) => {
-    const userClick = e.target as HTMLElement;
-    const text = userClick.innerText;
-    const clickedElement: string = userClick.className.split(" ")[1];
-    if (answerRef) {
-      const selectedElement = [...answerRef.children];
-      selectedElement.forEach((ele) => {
-        if (ele.className.includes(clickedElement)) {
-          (ele as HTMLElement).style.backgroundColor = "orange";
-        } else {
-          (ele as HTMLElement).style.backgroundColor = "";
-        }
-      });
-    }
-
-    setCurrentAnswer(text);
-  };
+  /*
+-----------------------------------------------------
+Helper Functions
+*/
 
   function shuffle(array: string[]) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -89,21 +36,174 @@ export default function QuizContent({ quiz }: IProps) {
     return array;
   }
 
-  function validateAnswer() {
-    if (currentAnswer === quiz[questionIndex].correctAnswer) {
+  function validateAnswer(currentAnswer: string, userAnswer: string) {
+    if (userAnswer === '') {
       return {
-        userAnswerStyle: "green",
+        userAnswerStyle: null,
+        correctAnswerStyle: null,
+        correctAnswerCount: 0,
+        resetStyle: null,
+      };
+    }
+    if (userAnswer === currentAnswer) {
+      console.log("CORRECT", currentAnswer)
+      return {
+        userAnswerStyle: "correct",
+        correctAnswerStyle: "correct",
         correctAnswerCount: 1,
-        correctAnswerStyle: "green",
+        resetStyle: "",
       };
     } else {
+      console.log("WRONG")
       return {
-        correctAnswerStyle: "green",
-        userAnswerStyle: "red",
+        userAnswerStyle: "incorrect",
+        correctAnswerStyle: "correct",
         correctAnswerCount: 0,
+        resetStyle: "",
       };
     }
   }
+
+  function updateStyling(
+    styleRef: React.RefObject<HTMLDivElement>,
+    getAnswerIndex: number,
+    correctAnswerIndex: number,
+    userAnswerStyle: string | null,
+    correctAnswerStyle: string | null
+  ) {
+    if (styleRef.current) {
+      const children = styleRef.current.children;
+      if (children[getAnswerIndex] && userAnswerStyle) {
+        (children[getAnswerIndex] as HTMLElement).classList.add(
+          userAnswerStyle
+        );
+      }
+      if (children[correctAnswerIndex] && correctAnswerStyle) {
+        (children[correctAnswerIndex] as HTMLElement).classList.add(
+          correctAnswerStyle
+        );
+      }
+    }
+  }
+
+  function handleQuestionChange(
+    setQuestionIndex: React.Dispatch<React.SetStateAction<number>>,
+    setCorrectAnswerCount: React.Dispatch<React.SetStateAction<number>>,
+    styleRef: React.RefObject<HTMLDivElement>,
+    correctAnswerCount: number,
+    correctAnswerIndex: number,
+    getAnswerIndex: number,
+    setUserAnswer: React.Dispatch<React.SetStateAction<string>>
+  ) {
+    setTimeout(() => {
+      setQuestionIndex((questionIndex) => questionIndex + 1);
+      if (styleRef.current) {
+        const children = styleRef.current.children;
+        if (children[correctAnswerIndex]) {
+          children[correctAnswerIndex].classList.remove("correct");
+        }
+        if (children[getAnswerIndex]) {
+          children[getAnswerIndex].classList.remove("incorrect");
+        }
+      }
+    }, 1500);
+      setCorrectAnswerCount((prev) => prev + correctAnswerCount);
+      setUserAnswer("")
+  }
+
+  function updateCategoryState(
+    category: Category,
+    setCategory: React.Dispatch<React.SetStateAction<Category>>,
+    currentQuestion: QuizItem,
+    getAnswerIndex: number,
+    correctAnswerIndex: number
+  ) {
+    if (
+      !category[currentQuestion.category] &&
+      getAnswerIndex === correctAnswerIndex
+    ) {
+      setCategory({ ...category, [currentQuestion.category]: 1 });
+    } else if (
+      getAnswerIndex === correctAnswerIndex &&
+      getAnswerIndex === correctAnswerIndex
+    ) {
+      setCategory({
+        ...category,
+        [currentQuestion.category]: (category[currentQuestion.category] += 1),
+      });
+    }
+  }
+
+  /*
+-----------------------------------------------------
+*/
+
+  useLayoutEffect(() => {
+    setAnswers(
+      shuffle([
+        ...currentQuestion.incorrectAnswers,
+        currentQuestion.correctAnswer,
+      ])
+    );
+    setCurrentAnswer(currentQuestion.correctAnswer);
+  }, [questionIndex]);
+
+  const handleIndexCount = () => {
+    console.log(currentAnswer, quiz[questionIndex].correctAnswer)
+    const { userAnswerStyle, correctAnswerStyle, correctAnswerCount } =
+      validateAnswer(currentAnswer, userAnswer);
+
+    if (questionIndex < quiz.length - 1) {
+      handleQuestionChange(
+        setQuestionIndex,
+        setCorrectAnswerCount,
+        styleRef,
+        correctAnswerCount,
+        correctAnswerIndex,
+        getAnswerIndex,
+        setUserAnswer
+      );
+      updateStyling(
+        styleRef,
+        getAnswerIndex,
+        correctAnswerIndex,
+        userAnswerStyle,
+        correctAnswerStyle
+      );
+      updateCategoryState(
+        category,
+        setCategory,
+        currentQuestion,
+        getAnswerIndex,
+        correctAnswerIndex
+      );
+    } else if (
+      questionIndex === quiz.length - 1 &&
+      getAnswerIndex === correctAnswerIndex
+    ) {
+      setCorrectAnswerCount((prev) => prev + correctAnswerCount);
+      setToggleView(true);
+    } else {
+      setToggleView(true);
+    }
+  };
+
+  const handleUserSelection = (e: React.MouseEvent) => {
+    const userClick = e.target as HTMLElement;
+    const text = userClick.innerText;
+    const clickedElement: string = userClick.className.split(" ")[1];
+    if (styleRef.current) {
+      const selectedElement = [...styleRef.current.children];
+      selectedElement.forEach((answer) => {
+        if (answer.className.includes(clickedElement)) {
+          (answer as HTMLElement).classList.add("selected");
+        } else {
+          (answer as HTMLElement).classList.remove("selected");
+        }
+      });
+    }
+    setUserAnswer(text);
+  };
 
   return (
     <section className="quiz-content container">
@@ -125,8 +225,8 @@ export default function QuizContent({ quiz }: IProps) {
           </div>
         ))}
       </div>
-      { toggleView && <p>QUIZ DONE</p> }
-      { !toggleView && <button onClick={handleIndexCount}>Next</button> }
+      {toggleView && <p>QUIZ DONE</p>}
+      {!toggleView && <button onClick={handleIndexCount}>Next</button>}
     </section>
   );
 }
