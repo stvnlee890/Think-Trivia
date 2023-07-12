@@ -3,7 +3,3 @@
     height: 100vh;
     color: var(--font-color);
 }
-
-.questions {
-    font-size: var(--second-header-size)
-}
