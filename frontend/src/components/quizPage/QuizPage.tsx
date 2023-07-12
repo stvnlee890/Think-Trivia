@@ -1,4 +1,6 @@
+import "./quizPage.css";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { TriviaApiService } from "../../services/triviaApiService";
 import QuizContent from "../quizContent/QuizContent";
 
@@ -16,6 +18,7 @@ export interface QuizItem {
 }
 
 export default function QuizPage() {
+  const navigate = useNavigate()
   const baseUrl = "https://the-trivia-api.com/v2";
   const triviaApiService = new TriviaApiService(baseUrl);
 
@@ -26,8 +29,8 @@ export default function QuizPage() {
   }, []);
 
   return (
-    <div>
-      <h1>Quiz Page</h1>
+    <div className="quizpage-container">
+      <p onClick={() => navigate('/')} >HOME</p>
       {quiz.length > 0 && <QuizContent quiz={quiz} />}
       {quiz.length <= 0 && <h1>Something Went Wrong</h1>}
     </div>

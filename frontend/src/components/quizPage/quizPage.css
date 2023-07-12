@@ -1,0 +1,9 @@
+.quizpage-container {
+    background: linear-gradient(#254E8D, 60%, #4861B9);
+    height: 100vh;
+    color: var(--font-color);
+}
+
+.questions {
+    font-size: var(--second-header-size)
+}

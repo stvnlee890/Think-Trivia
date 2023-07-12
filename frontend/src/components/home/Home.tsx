@@ -19,7 +19,7 @@ export default function Home() {
         <img className="icons ideas" src={ideas}></img>
         <img className="icons quiz" src={quiz}></img>
       </div>
-      <button onClick={() => navigate("/quiz")}>Start Playing</button>
+      <button className="btn" onClick={() => navigate("/quiz")}>Start Playing</button>
     </div>
   );
 }

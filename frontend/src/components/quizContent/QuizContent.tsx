@@ -195,7 +195,7 @@ Helper Functions
       const selectedElement = [...styleRef.current.children];
       selectedElement.forEach((answer) => {
         if (answer.className.includes(clickedElement)) {
-          (answer as HTMLElement).style.backgroundColor = "orange";
+          (answer as HTMLElement).style.backgroundColor = "#1194bf";
         } else {
           (answer as HTMLElement).style.backgroundColor = "";
         }
@@ -206,12 +206,12 @@ Helper Functions
 
   return (
     <section className="quiz-content container">
-      <p>
-        {questionIndex + 1} / {quiz.length}
+      <p className="quiz-content-tracker">
+        Question {questionIndex + 1} / {quiz.length}
       </p>
-      <p>{correctAnswerCount}</p>
+      {/* <p>{correctAnswerCount}</p> */}
       <div className="quiz-content wrapper">
-        <p>{currentQuestion.question.text}</p>
+        <p className="quiz-content-question">{currentQuestion.question.text}</p>
       </div>
       <div ref={styleRef} className="answer-container">
         {answers.map((ele, idx) => (
@@ -225,7 +225,7 @@ Helper Functions
         ))}
       </div>
       {toggleView && <p>QUIZ DONE</p>}
-      {!toggleView && <button onClick={handleIndexCount}>Next</button>}
+      {!toggleView && <button className="btn" onClick={handleIndexCount}>Next</button>}
     </section>
   );
 }

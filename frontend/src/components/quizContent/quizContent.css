@@ -2,6 +2,9 @@
    display: flex;
    flex-direction: column;
    align-items: center;
+   width: 40%;
+   margin: 0 auto;
+   padding-top: 100px;
 }
 
 .quiz-content.container > p {
@@ -17,16 +20,35 @@
 .answer-container {
     text-align: center;
     margin-top: 40px;
-    width: 40%;
+    width: 100%;
+}
+
+.quiz-content-tracker {
+    color:#95a8c6;
+    text-shadow: 1px 1px 1px #202020;
+}
+
+.quiz-content-question {
+    font-size: var(--second-header-size);
+    font-weight: bold;
+    text-shadow: 3px 3px 3px #202020;
+}
+
+.answers {
+    color: black
 }
 
 .answer-wrapper {
     display: flex;
-    border: 1px solid black;
     border-radius: 10px;
     justify-content: center;
     height: 50px;
     align-items: center;
     margin-bottom: 20px;
+    background-color: #E8F1FE;
+    cursor: pointer;
+    box-shadow: 2px 2px 2px #202020;
 }
+
+
 
