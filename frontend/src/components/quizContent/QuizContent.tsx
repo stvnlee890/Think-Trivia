@@ -65,9 +65,7 @@ Helper Functions
 
   function updateStyling(
     styleRef: React.RefObject<HTMLDivElement>,
-    getAnswerIndex: number,
     correctAnswerIndex: number,
-    userAnswerStyle: string | null,
     correctAnswerStyle: string | null
   ) {
     if (styleRef.current) {
@@ -157,9 +155,7 @@ Helper Functions
       );
       updateStyling(
         styleRef,
-        getAnswerIndex,
         correctAnswerIndex,
-        userAnswerStyle,
         correctAnswerStyle
       );
       updateCategoryState(
@@ -176,9 +172,7 @@ Helper Functions
       setCorrectAnswerCount((prev) => prev + correctAnswerCount);
       updateStyling(
         styleRef,
-        getAnswerIndex,
         correctAnswerIndex,
-        userAnswerStyle,
         correctAnswerStyle
       );
       setToggleView(true);
