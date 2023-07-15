@@ -1,5 +1,9 @@
 import "@testing-library/jest-dom/extend-expect";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import {
+  render,
+  screen,
+  fireEvent,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { QuizItem } from "../components/quizPage/QuizPage";
 import QuizContent from "../components/quizContent/QuizContent";
@@ -32,19 +36,32 @@ test("should start the quiz index at 1", () => {
   expect(screen.getByText("Question 1 / 10")).toBeVisible();
 });
 
-test("button should icrement quiz index by 1 when clicked", async () => {
+test("button should increment quiz index when clicked", () => {
   render(<QuizContent quiz={mockQuiz} />);
   jest.useFakeTimers();
-  fireEvent.click(screen.getByRole("button"));
-  act(() => {
-    jest.runAllTimers();
-  });
-
-  expect(screen.getByText("Question 2 / 10")).toBeVisible();
-
+  for (let i = 0; i < mockQuiz.length; i++) {
+    fireEvent.click(screen.getByRole("button"));
+    act(() => {
+      jest.runAllTimers();
+    });
+  }
+  expect(screen.getByText("Question 10 / 10")).toBeVisible();
+  expect(screen.getByText("QUIZ DONE")).toBeVisible();
   jest.useRealTimers();
 });
 
+test("button should disable temporarily after clicked", () => {
+  render(<QuizContent quiz={mockQuiz} />);
+  const button = screen.getByRole('button')
+  jest.useFakeTimers();
+  fireEvent.click(screen.getByRole("button"));
+  expect(button).toBeDisabled();
+  act(() => {
+    jest.runAllTimers()
+  })
+  expect(button).not.toBeDisabled()
+  jest.useRealTimers()
+});
 
 test("the sum of category values after each quiz should be 10", async () => {
   const user = userEvent.setup();

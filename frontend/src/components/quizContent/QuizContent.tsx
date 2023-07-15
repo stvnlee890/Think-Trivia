@@ -106,7 +106,6 @@ Helper Functions
     setCorrectAnswerCount((prev) => prev + correctAnswerCount);
     setUserAnswer("");
   }
-  console.log(disableBtn);
 
   function updateCategoryState(
     category: Category,
