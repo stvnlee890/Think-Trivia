@@ -1,9 +1,5 @@
 import "@testing-library/jest-dom/extend-expect";
-import {
-  render,
-  screen,
-  fireEvent,
-} from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { QuizItem } from "../components/quizPage/QuizPage";
 import QuizContent from "../components/quizContent/QuizContent";
@@ -50,17 +46,17 @@ test("button should increment quiz index when clicked", () => {
   jest.useRealTimers();
 });
 
-test("button should disable temporarily after clicked", () => {
+test("button should be disabled temporarily after clicked", () => {
   render(<QuizContent quiz={mockQuiz} />);
-  const button = screen.getByRole('button')
+  const button = screen.getByRole("button");
   jest.useFakeTimers();
   fireEvent.click(screen.getByRole("button"));
   expect(button).toBeDisabled();
   act(() => {
-    jest.runAllTimers()
-  })
-  expect(button).not.toBeDisabled()
-  jest.useRealTimers()
+    jest.runAllTimers();
+  });
+  expect(button).not.toBeDisabled();
+  jest.useRealTimers();
 });
 
 test("the sum of category values after each quiz should be 10", async () => {
