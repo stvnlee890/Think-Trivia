@@ -14,7 +14,9 @@ describe("Home page renders", () => {
   it("should display button's proper text", async () => {
     render(<Home />);
     const button = await screen.findByRole("button");
+    const text = screen.getByText(/Unleash your/)
     expect(button).toHaveTextContent("Start Playing");
+    expect(text).toBeVisible()
   });
 });
 
