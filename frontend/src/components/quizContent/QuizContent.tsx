@@ -19,6 +19,8 @@ export default function QuizContent({ quiz }: IProps) {
   const [userAnswer, setUserAnswer] = useState<string>("");
   const [category, setCategory] = useState<Category>({});
   const [toggleView, setToggleView] = useState<boolean>(false);
+  const [disableBtn, setDisableBtn] = useState<boolean>(false);
+
   const currentQuestion = quiz[questionIndex];
   const getAnswerIndex = answers.indexOf(currentAnswer);
   const correctAnswerIndex = answers.indexOf(currentQuestion.correctAnswer);
@@ -89,6 +91,7 @@ Helper Functions
     correctAnswerCount: number,
     setUserAnswer: React.Dispatch<React.SetStateAction<string>>
   ) {
+    setDisableBtn(true);
     setTimeout(() => {
       setQuestionIndex((questionIndex) => questionIndex + 1);
       if (styleRef.current) {
@@ -98,10 +101,12 @@ Helper Functions
           (answer as HTMLElement).style.backgroundColor = "";
         });
       }
+      setDisableBtn(false);
     }, 1500);
     setCorrectAnswerCount((prev) => prev + correctAnswerCount);
     setUserAnswer("");
   }
+  console.log(disableBtn);
 
   function updateCategoryState(
     category: Category,
@@ -153,11 +158,7 @@ Helper Functions
         correctAnswerCount,
         setUserAnswer
       );
-      updateStyling(
-        styleRef,
-        correctAnswerIndex,
-        correctAnswerStyle
-      );
+      updateStyling(styleRef, correctAnswerIndex, correctAnswerStyle);
       updateCategoryState(
         category,
         setCategory,
@@ -170,11 +171,7 @@ Helper Functions
       getAnswerIndex === correctAnswerIndex
     ) {
       setCorrectAnswerCount((prev) => prev + correctAnswerCount);
-      updateStyling(
-        styleRef,
-        correctAnswerIndex,
-        correctAnswerStyle
-      );
+      updateStyling(styleRef, correctAnswerIndex, correctAnswerStyle);
       setToggleView(true);
     } else {
       setToggleView(true);
@@ -219,7 +216,15 @@ Helper Functions
         ))}
       </div>
       {toggleView && <p>QUIZ DONE</p>}
-      {!toggleView && <button className="btn" onClick={handleIndexCount}>Next</button>}
+      {!toggleView && (
+        <button
+          className="btn"
+          disabled={disableBtn}
+          onClick={handleIndexCount}
+        >
+          Next
+        </button>
+      )}
     </section>
   );
 }

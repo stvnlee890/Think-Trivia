@@ -1,8 +1,9 @@
 import "@testing-library/jest-dom/extend-expect";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { QuizItem } from "../components/quizPage/QuizPage";
 import QuizContent from "../components/quizContent/QuizContent";
+import { act } from "react-dom/test-utils";
 
 const mockQuiz: QuizItem[] = [];
 
@@ -26,20 +27,24 @@ for (let i = 0; i < 10; i++) {
   mockQuiz.push(quiz);
 }
 
-test("count should increment correctly and display the question text", async () => {
-  const user = userEvent.setup();
+test("should start the quiz index at 1", () => {
   render(<QuizContent quiz={mockQuiz} />);
-  let count = 0;
-  const button = await screen.findByRole("button");
-  for (let i = 0; i < mockQuiz.length; i++) {
-    await user.click(button);
-    count++;
-  }
-  const countParagraph = screen.getByText(`${count} / ${mockQuiz.length}`);
-  const questionText = screen.getByText(mockQuiz[count - 1].question.text);
-  expect(countParagraph).toHaveTextContent("10 / 10");
-  expect(questionText).toBeInTheDocument();
+  expect(screen.getByText("Question 1 / 10")).toBeVisible();
 });
+
+test("button should icrement quiz index by 1 when clicked", async () => {
+  render(<QuizContent quiz={mockQuiz} />);
+  jest.useFakeTimers();
+  fireEvent.click(screen.getByRole("button"));
+  act(() => {
+    jest.runAllTimers();
+  });
+
+  expect(screen.getByText("Question 2 / 10")).toBeVisible();
+
+  jest.useRealTimers();
+});
+
 
 test("the sum of category values after each quiz should be 10", async () => {
   const user = userEvent.setup();
@@ -60,5 +65,3 @@ test("the sum of category values after each quiz should be 10", async () => {
   const sum = Object.values(category).reduce((acc, value) => acc + value, 0);
   expect(sum).toBe(10);
 });
-
-
