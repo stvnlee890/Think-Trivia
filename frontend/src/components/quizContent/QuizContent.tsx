@@ -13,7 +13,7 @@ type Category = {
 
 export default function QuizContent({ quiz }: IProps) {
   const styleRef = useRef<HTMLDivElement>(null);
-  const [questionIndex, setQuestionIndex] = useState<number>(8);
+  const [questionIndex, setQuestionIndex] = useState<number>(0);
   const [correctAnswerCount, setCorrectAnswerCount] = useState<number>(0);
   const [answers, setAnswers] = useState<string[]>([]);
   const [currentAnswer, setCurrentAnswer] = useState<string>("");

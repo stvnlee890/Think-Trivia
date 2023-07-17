@@ -3,3 +3,11 @@
     height: 100vh;
     color: var(--font-color);
 }
+
+.quizpage-wrapper {
+    display: flex;
+    justify-content: center;
+}
+.loading {
+    align-items: center;
+}
