@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
 // import userEvent from "@testing-library/user-event";
-import { TriviaApiService } from "../services/triviaApiService";
+import { TriviaApiService } from "../services/apiService/triviaApiService";
 import QuizPage from "../components/quizPage/QuizPage";
 const baseUrl = "https://the-trivia-api.com/v2";
 
