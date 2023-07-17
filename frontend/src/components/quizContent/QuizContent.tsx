@@ -2,6 +2,7 @@ import "./quizContent.css";
 import { useState, useLayoutEffect, useRef } from "react";
 import { QuizItem } from "../quizPage/QuizPage";
 
+console.clear()
 export interface IProps {
   quiz: QuizItem[];
 }
@@ -12,7 +13,7 @@ type Category = {
 
 export default function QuizContent({ quiz }: IProps) {
   const styleRef = useRef<HTMLDivElement>(null);
-  const [questionIndex, setQuestionIndex] = useState<number>(0);
+  const [questionIndex, setQuestionIndex] = useState<number>(8);
   const [correctAnswerCount, setCorrectAnswerCount] = useState<number>(0);
   const [answers, setAnswers] = useState<string[]>([]);
   const [currentAnswer, setCurrentAnswer] = useState<string>("");
@@ -22,7 +23,7 @@ export default function QuizContent({ quiz }: IProps) {
   const [disableBtn, setDisableBtn] = useState<boolean>(false);
 
   const currentQuestion = quiz[questionIndex];
-  const getAnswerIndex = answers.indexOf(currentAnswer);
+  const getAnswerIndex = answers.indexOf(userAnswer);
   const correctAnswerIndex = answers.indexOf(currentQuestion.correctAnswer);
 
   /*
@@ -39,7 +40,7 @@ Helper Functions
   }
 
   function validateAnswer(currentAnswer: string, userAnswer: string) {
-    if (userAnswer === "") {
+    if (!userAnswer) {
       return {
         userAnswerStyle: null,
         correctAnswerStyle: "red",
@@ -55,7 +56,6 @@ Helper Functions
         resetStyle: "",
       };
     } else {
-      console.log("Here");
       return {
         userAnswerStyle: "red",
         correctAnswerStyle: "green",
@@ -68,16 +68,17 @@ Helper Functions
   function updateStyling(
     styleRef: React.RefObject<HTMLDivElement>,
     correctAnswerIndex: number,
-    correctAnswerStyle: string | null
+    correctAnswerStyle: string | null,
+    userAnswerStyle: string | null,
+    getAnswerIndex: number
   ) {
+    console.log(getAnswerIndex)
     if (styleRef.current) {
       const children = styleRef.current.children;
-      // if (children[getAnswerIndex] && userAnswerStyle) {
-      //   console.log(userAnswerStyle);
-      //   (children[getAnswerIndex] as HTMLElement).style.backgroundColor = userAnswerStyle
-      // }
+      if (children[getAnswerIndex] && userAnswerStyle) {
+        (children[getAnswerIndex] as HTMLElement).style.backgroundColor = userAnswerStyle
+      }
       if (children[correctAnswerIndex] && correctAnswerStyle) {
-        console.log(correctAnswerStyle);
         (children[correctAnswerIndex] as HTMLElement).style.backgroundColor =
           correctAnswerStyle;
       }
@@ -145,7 +146,6 @@ Helper Functions
   }, [questionIndex]);
 
   const handleIndexCount = () => {
-    console.log(currentAnswer, quiz[questionIndex].correctAnswer);
     const { userAnswerStyle, correctAnswerStyle, correctAnswerCount } =
       validateAnswer(currentAnswer, userAnswer);
 
@@ -157,7 +157,7 @@ Helper Functions
         correctAnswerCount,
         setUserAnswer
       );
-      updateStyling(styleRef, correctAnswerIndex, correctAnswerStyle);
+      updateStyling(styleRef, correctAnswerIndex, correctAnswerStyle, userAnswerStyle, getAnswerIndex);
       updateCategoryState(
         category,
         setCategory,
@@ -170,9 +170,10 @@ Helper Functions
       getAnswerIndex === correctAnswerIndex
     ) {
       setCorrectAnswerCount((prev) => prev + correctAnswerCount);
-      updateStyling(styleRef, correctAnswerIndex, correctAnswerStyle);
+      updateStyling(styleRef, correctAnswerIndex, correctAnswerStyle, userAnswerStyle, getAnswerIndex);
       setToggleView(true);
     } else {
+      updateStyling(styleRef, correctAnswerIndex, correctAnswerStyle, userAnswerStyle, getAnswerIndex)
       setToggleView(true);
     }
   };
@@ -186,13 +187,14 @@ Helper Functions
       selectedElement.forEach((answer) => {
         if (answer.className.includes(clickedElement)) {
           (answer as HTMLElement).style.backgroundColor = "#1194bf";
+          setUserAnswer(text);
         } else {
           (answer as HTMLElement).style.backgroundColor = "";
         }
       });
     }
-    setUserAnswer(text);
   };
+
 
   return (
     <section className="quiz-content container">
