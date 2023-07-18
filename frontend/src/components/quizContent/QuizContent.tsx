@@ -27,7 +27,7 @@ export default function QuizContent({ quiz }: IProps) {
   const getAnswerIndex = answers.indexOf(userAnswer);
   const correctAnswerIndex = answers.indexOf(currentQuestion.correctAnswer);
 
-
+console.log(quiz)
   /*
 -----------------------------------------------------
 Helper Functions
@@ -131,6 +131,8 @@ Helper Functions
         ...category,
         [currentQuestion.category]: (category[currentQuestion.category] += 1),
       });
+    } else {
+      setCategory({ ...category, [currentQuestion.category]: 0 });
     }
   }
 
@@ -195,6 +197,13 @@ Helper Functions
         correctAnswerStyle,
         userAnswerStyle,
         getAnswerIndex
+      );
+      updateCategoryState(
+        category,
+        setCategory,
+        currentQuestion,
+        getAnswerIndex,
+        correctAnswerIndex
       );
       setToggleView(true);
       setToggleModal(true)
