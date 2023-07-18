@@ -1,10 +1,10 @@
 import "./quizPage.css";
-import { useEffect, useState, useRef } from "react";
+import { useLayoutEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { TriviaApiService } from "../../services/apiService/triviaApiService";
 import { dotAnimation } from "../../services/animationService/animationHelper";
 import QuizContent from "../quizContent/QuizContent";
-import home24 from "../../assets/homeIcons/home24.png"
+import home24 from "../../assets/homeIcons/home24.png";
 
 export interface QuizItem {
   category: string;
@@ -27,19 +27,28 @@ export default function QuizPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [quiz, setQuiz] = useState<QuizItem[]>([]);
-  useEffect(() => {
+
+  useLayoutEffect(() => {
+    let holderRef: HTMLDivElement | null = null
     if (dotRef.current) {
-      dotAnimation(dotRef.current.children);
+      dotAnimation(dotRef.current);
+      holderRef = dotRef.current
     }
     triviaApiService.getRandomQuestions().then((res) => setQuiz(res));
     setTimeout(() => {
       setIsLoading(false);
     }, 2000);
+    
+    return () => {
+      if (holderRef) {
+        dotAnimation(holderRef).revert();
+      }
+    };
   }, []);
 
   return (
     <div className="quizpage-container">
-      <img className="home-icon" onClick={() => navigate('/')} src={home24}/>
+      <img className="home-icon" onClick={() => navigate("/")} src={home24} />
       <div className="quizpage-wrapper">
         {!isLoading && quiz.length > 0 && <QuizContent quiz={quiz} />}
         {isLoading && (
