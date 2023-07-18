@@ -27,8 +27,8 @@ export default function Modal({
         <div className="category-container">
           <h3>Categories</h3>
           {Object.keys(category).map((key, idx) => (
-            <div className="category-wrapper">
-              <p className="category key" key={idx}>
+            <div key={idx} className="category-wrapper">
+              <p className="category key">
                 {key.replace(/_/g, " ")}:
               </p>
               <p className="category value">{category[key]}</p>
