@@ -11,6 +11,7 @@
 .home-header {
     font-size: 5.5rem;
     text-shadow: 3px 3px 3px #202020;
+    text-align: center;
 }
 
 .btn {
@@ -59,3 +60,40 @@
     grid-column: 2/2;
     align-self: end;
 }
+
+@media screen and (max-width: 700px) {
+    .icons.ideas {
+        width: 70px;
+    }
+    .icons.quiz {
+        width: 120px;
+    }
+
+    .home-text {
+        font-size: 1rem
+    }
+
+    .home-header {
+        font-size: 4.2rem;
+    }
+
+    .btn {
+        font-size: 1rem;
+    }
+}
+
+
+@media screen and (max-width: 400px) {
+    .home-text {
+        font-size: .8rem
+    }
+
+    .home-header {
+        font-size: 3rem;
+    }
+
+    .btn {
+        font-size: .9rem;
+    }
+}
+
