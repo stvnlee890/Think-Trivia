@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { TriviaApiService } from "../../services/apiService/triviaApiService";
 import { dotAnimation } from "../../services/animationService/animationHelper";
 import QuizContent from "../quizContent/QuizContent";
+import home24 from "../../assets/homeIcons/home24.png"
 
 export interface QuizItem {
   category: string;
@@ -38,7 +39,7 @@ export default function QuizPage() {
 
   return (
     <div className="quizpage-container">
-      <p onClick={() => navigate("/")}>HOME</p>
+      <img className="home-icon" onClick={() => navigate('/')} src={home24}/>
       <div className="quizpage-wrapper">
         {!isLoading && quiz.length > 0 && <QuizContent quiz={quiz} />}
         {isLoading && (
