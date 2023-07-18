@@ -1,26 +1,41 @@
 import { Category } from "../quizContent/QuizContent";
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from "react";
 import "./modal.css";
 
 type ModalProps = {
   category: Category;
   correctAnswerCount: number;
-  setToggleModal: Dispatch<SetStateAction<boolean>>
+  setToggleModal: Dispatch<SetStateAction<boolean>>;
 };
 
-export default function Modal({ category, correctAnswerCount, setToggleModal }: ModalProps) {
-    console.log(correctAnswerCount)
+export default function Modal({
+  category,
+  correctAnswerCount,
+  setToggleModal,
+}: ModalProps) {
+  console.log(correctAnswerCount);
+
   return (
     <div className="modal-container">
       <div className="modal-wrapper">
-        <p onClick={() => setToggleModal(false)} className="close-button">Close</p>
-        <h1>Categories</h1>
-        <p>Score: {correctAnswerCount} / 10</p>
-        {Object.keys(category).map((key, idx) => (
-          <li key={idx}>
-            {key}: {category[key]}
-          </li>
-        ))}
+        <p onClick={() => setToggleModal(false)} className="close-button">
+          close
+        </p>
+        <div className="modal-header">
+          <h1>Overview</h1>
+        </div>
+        <div className="category-container">
+          <h3>Categories</h3>
+          {Object.keys(category).map((key, idx) => (
+            <div className="category-wrapper">
+              <p className="category key" key={idx}>
+                {key.replace(/_/g, " ")}:
+              </p>
+              <p className="category value">{category[key]}</p>
+            </div>
+          ))}
+        </div>
+        <h3>Score: {correctAnswerCount} / 10</h3>
       </div>
     </div>
   );

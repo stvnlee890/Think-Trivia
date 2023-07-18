@@ -13,8 +13,8 @@
 .modal-wrapper {
     background-color: rgb(255, 255, 255);
     border-radius: 20px;
-    width: 30%;
-    height: 50%;
+    width: 20%;
+    height: 60%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -25,6 +25,52 @@
 .close-button {
     position: absolute;
     top: 0;
-    left: 1;
+    left: 0;
     cursor: pointer;
+    padding: 10px
+}
+
+.category-wrapper {
+    display: grid;
+    width: 70%;
+    grid-template-columns: 200px .20px;
+    margin: 0 auto
+}
+
+.category-container {
+    margin-top: 20px;
+    height: 80%;
+    border-bottom: .5px solid #254E8D;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.category {
+    margin-bottom: 10px
+}
+
+.modal-header {
+    border-bottom: .5px solid #254E8D;
+    width: 100%;
+}
+
+.modal-header > h1 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+h3 {
+    text-align: center;
+    margin-bottom: 30px
+}
+
+.key {
+    font-weight: bold;
+    color: black
+}
+.value {
+    justify-self: end;
+    font-weight: bold;
+    color: #4861B9;
+    justify-self: end;
 }

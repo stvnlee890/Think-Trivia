@@ -50,5 +50,13 @@
     box-shadow: 2px 2px 2px #202020;
 }
 
+.play-again {
+    cursor: pointer;
+    font-size: 1.4rem;
+    font-weight: bold;
+    text-shadow: 3px 3px 3px #202020;
+}
 
-
+.play-again:hover{
+    text-shadow: 2px 2px 2px #202020;
+}
