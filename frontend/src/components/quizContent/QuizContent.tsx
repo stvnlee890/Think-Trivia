@@ -1,19 +1,19 @@
 import "./quizContent.css";
 import { useState, useLayoutEffect, useRef } from "react";
 import { QuizItem } from "../quizPage/QuizPage";
+import Modal from "../modal/Modal";
 
-console.clear()
 export interface IProps {
   quiz: QuizItem[];
 }
 
-type Category = {
+export type Category = {
   [key: string]: number;
 };
 
 export default function QuizContent({ quiz }: IProps) {
   const styleRef = useRef<HTMLDivElement>(null);
-  const [questionIndex, setQuestionIndex] = useState<number>(0);
+  const [questionIndex, setQuestionIndex] = useState<number>(8);
   const [correctAnswerCount, setCorrectAnswerCount] = useState<number>(0);
   const [answers, setAnswers] = useState<string[]>([]);
   const [currentAnswer, setCurrentAnswer] = useState<string>("");
@@ -21,16 +21,18 @@ export default function QuizContent({ quiz }: IProps) {
   const [category, setCategory] = useState<Category>({});
   const [toggleView, setToggleView] = useState<boolean>(false);
   const [disableBtn, setDisableBtn] = useState<boolean>(false);
+  const [toggleModal, setToggleModal] = useState<boolean>(false)
 
   const currentQuestion = quiz[questionIndex];
   const getAnswerIndex = answers.indexOf(userAnswer);
   const correctAnswerIndex = answers.indexOf(currentQuestion.correctAnswer);
 
+
   /*
 -----------------------------------------------------
 Helper Functions
 */
-// console.log(category, correctAnswerCount)
+  // console.log(category, correctAnswerCount)
   function shuffle(array: string[]) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -72,11 +74,12 @@ Helper Functions
     userAnswerStyle: string | null,
     getAnswerIndex: number
   ) {
-    console.log(getAnswerIndex)
+    console.log(getAnswerIndex);
     if (styleRef.current) {
       const children = styleRef.current.children;
       if (children[getAnswerIndex] && userAnswerStyle) {
-        (children[getAnswerIndex] as HTMLElement).style.backgroundColor = userAnswerStyle
+        (children[getAnswerIndex] as HTMLElement).style.backgroundColor =
+          userAnswerStyle;
       }
       if (children[correctAnswerIndex] && correctAnswerStyle) {
         (children[correctAnswerIndex] as HTMLElement).style.backgroundColor =
@@ -157,7 +160,13 @@ Helper Functions
         correctAnswerCount,
         setUserAnswer
       );
-      updateStyling(styleRef, correctAnswerIndex, correctAnswerStyle, userAnswerStyle, getAnswerIndex);
+      updateStyling(
+        styleRef,
+        correctAnswerIndex,
+        correctAnswerStyle,
+        userAnswerStyle,
+        getAnswerIndex
+      );
       updateCategoryState(
         category,
         setCategory,
@@ -170,11 +179,25 @@ Helper Functions
       getAnswerIndex === correctAnswerIndex
     ) {
       setCorrectAnswerCount((prev) => prev + correctAnswerCount);
-      updateStyling(styleRef, correctAnswerIndex, correctAnswerStyle, userAnswerStyle, getAnswerIndex);
+      updateStyling(
+        styleRef,
+        correctAnswerIndex,
+        correctAnswerStyle,
+        userAnswerStyle,
+        getAnswerIndex
+      );
       setToggleView(true);
+      setToggleModal(true)
     } else {
-      updateStyling(styleRef, correctAnswerIndex, correctAnswerStyle, userAnswerStyle, getAnswerIndex)
+      updateStyling(
+        styleRef,
+        correctAnswerIndex,
+        correctAnswerStyle,
+        userAnswerStyle,
+        getAnswerIndex
+      );
       setToggleView(true);
+      setToggleModal(true)
     }
   };
 
@@ -194,7 +217,6 @@ Helper Functions
       });
     }
   };
-
 
   return (
     <section className="quiz-content container">
@@ -216,7 +238,7 @@ Helper Functions
           </div>
         ))}
       </div>
-      {toggleView && <p>QUIZ DONE</p>}
+      {(toggleView || toggleModal) && <p onClick={() => window.location.reload()}>Play Again</p>}
       {!toggleView && (
         <button
           className="btn"
@@ -225,6 +247,9 @@ Helper Functions
         >
           Next
         </button>
+      )}
+      {toggleModal && (
+        <Modal category={category} correctAnswerCount={correctAnswerCount} setToggleModal={setToggleModal}/>
       )}
     </section>
   );
