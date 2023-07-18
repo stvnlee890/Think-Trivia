@@ -136,6 +136,12 @@ Helper Functions
     }
   }
 
+  function timeModal() {
+    setTimeout(() => {
+      setToggleModal(true)
+    }, 500)
+  }
+
   /*
 -----------------------------------------------------
 */
@@ -189,7 +195,8 @@ Helper Functions
         getAnswerIndex
       );
       setToggleView(true);
-      setToggleModal(true)
+      // setToggleModal(true)
+      timeModal()
     } else {
       updateStyling(
         styleRef,
@@ -206,7 +213,8 @@ Helper Functions
         correctAnswerIndex
       );
       setToggleView(true);
-      setToggleModal(true)
+      // setToggleModal(true)
+      timeModal()
     }
   };
 
