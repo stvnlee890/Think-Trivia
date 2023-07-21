@@ -26,13 +26,11 @@ export default function QuizContent({ quiz }: IProps) {
   const currentQuestion = quiz[questionIndex];
   const getAnswerIndex = answers.indexOf(userAnswer);
   const correctAnswerIndex = answers.indexOf(currentQuestion.correctAnswer);
-
-console.log(quiz)
   /*
 -----------------------------------------------------
 Helper Functions
 */
-  // console.log(category, correctAnswerCount)
+  // .log(category, correctAnswerCount)
   function shuffle(array: string[]) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -74,7 +72,6 @@ Helper Functions
     userAnswerStyle: string | null,
     getAnswerIndex: number
   ) {
-    console.log(getAnswerIndex);
     if (styleRef.current) {
       const children = styleRef.current.children;
       if (children[getAnswerIndex] && userAnswerStyle) {
@@ -118,13 +115,14 @@ Helper Functions
     getAnswerIndex: number,
     correctAnswerIndex: number
   ) {
+    
     if (
       !category[currentQuestion.category] &&
       getAnswerIndex === correctAnswerIndex
     ) {
       setCategory({ ...category, [currentQuestion.category]: 1 });
     } else if (
-      getAnswerIndex === correctAnswerIndex &&
+
       getAnswerIndex === correctAnswerIndex
     ) {
       setCategory({
@@ -193,6 +191,13 @@ Helper Functions
         correctAnswerStyle,
         userAnswerStyle,
         getAnswerIndex
+      );
+      updateCategoryState(
+        category,
+        setCategory,
+        currentQuestion,
+        getAnswerIndex,
+        correctAnswerIndex
       );
       setToggleView(true);
       // setToggleModal(true)
