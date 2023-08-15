@@ -14,7 +14,6 @@ Live Site: [Think Trivia](https://think-trivia.netlify.app/)
 - React TypeScript
 - React Router
 - GSAP Animation
-- Node.js
 - Jest
 - React Testing Library
 - API: Utilized [The Trivia Api](https://the-trivia-api.com/v) to retrieve quiz questions
